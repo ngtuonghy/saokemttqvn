@@ -6,10 +6,12 @@ import {
 	AppShell,
 	Burger,
 	Group,
+	Popover,
 	ScrollArea,
+	Text,
 	Title,
 } from "@mantine/core";
-import { IconBrandGithub } from "@tabler/icons-react";
+import { IconBrandGithub, IconInfoCircle } from "@tabler/icons-react";
 import Navbar from "./navbar";
 import Link from "next/link";
 export const HeaderInfo = () => {
@@ -62,7 +64,24 @@ export const MainLayout = ({ children }) => {
 								Sao kê MTTQVN
 							</Title>
 						</Link>
-						<Title order={3} size="sm">
+						<Popover
+							hiddenFrom="sm"
+							width={200}
+							position="bottom"
+							withArrow
+							shadow="md"
+						>
+							<Popover.Target>
+								<ActionIcon variant="transparent">
+									<IconInfoCircle stroke={2} />
+								</ActionIcon>
+							</Popover.Target>
+							<Popover.Dropdown>
+								<Text size="md">VCB của MTTQ từ 1/9/2024 - 10/9/2024</Text>
+							</Popover.Dropdown>
+						</Popover>
+
+						<Title order={3} size="sm" className="mantine-visible-from-md">
 							VCB của MTTQ từ 1/9/2024 - 10/9/2024
 						</Title>
 					</Group>
@@ -78,7 +97,7 @@ export const MainLayout = ({ children }) => {
 					opened && toggle();
 				}}
 			>
-				<AppShell.Section component={ScrollArea}>
+				<AppShell.Section grow component={ScrollArea}>
 					<Navbar />
 				</AppShell.Section>
 				<AppShell.Section hiddenFrom="sm">
