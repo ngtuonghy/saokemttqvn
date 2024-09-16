@@ -62,6 +62,9 @@ export const MainLayout = ({ children }) => {
 								Sao kê MTTQVN
 							</Title>
 						</Link>
+						<Title order={3} size="sm">
+							VCB của MTTQ từ 1/9/2024 - 10/9/2024
+						</Title>
 					</Group>
 					<Group className="mantine-visible-from-md">
 						<HeaderInfo />

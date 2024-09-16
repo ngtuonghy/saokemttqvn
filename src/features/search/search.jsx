@@ -1,3 +1,4 @@
+"use client";
 import {
 	ActionIcon,
 	CloseButton,
@@ -94,7 +95,7 @@ const Search = ({ search, setSearch, isLoading, date, setDate }) => {
 							/>
 						}
 						label="Ngân hàng"
-						value={search.banksName}
+						value={search.banksName || []}
 						onChange={(value) =>
 							setSearch((va) => ({ ...va, banksName: value }))
 						}

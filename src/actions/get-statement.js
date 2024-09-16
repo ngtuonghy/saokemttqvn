@@ -46,6 +46,7 @@ const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
 			},
 		});
 	}
+
 	let dateFilter = {};
 	if (date) {
 		const startDate = formatDate(date[0]);
@@ -61,7 +62,6 @@ const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
 			};
 		}
 	}
-	console.log(dateFilter);
 	const data = await prisma.statement.findMany({
 		skip: (offSet - 1) * p,
 		take: p,
