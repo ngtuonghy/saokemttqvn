@@ -72,7 +72,7 @@ export function Statement({ search, setIsLoading, isLoading, date, setDate }) {
 
 	// statement.forEach((element) => console.log(element.date));
 	const rows = statement.map((element) => (
-		<Table.Tr>
+		<Table.Tr key={element.id}>
 			<Table.Td>{formatDate(element.date)}</Table.Td>
 			<Table.Td>
 				<NumberFormatter
@@ -100,7 +100,7 @@ export function Statement({ search, setIsLoading, isLoading, date, setDate }) {
 				<Table highlightOnHover>
 					<Table.Thead>
 						<Table.Tr>
-							<Table.Th min>Ngày</Table.Th>
+							<Table.Th>Ngày</Table.Th>
 							<Table.Th>Số tiền chuyển (VNĐ)</Table.Th>
 							<Table.Th>Nội dung chi tiết</Table.Th>
 							<Table.Th>Ngân hàng</Table.Th>

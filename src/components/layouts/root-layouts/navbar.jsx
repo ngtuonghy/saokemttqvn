@@ -37,7 +37,7 @@ const Navbar = () => {
 		},
 	];
 	return (
-		<Stack h="full" justify="space-between" grow>
+		<Stack h="full" justify="space-between">
 			<Stack>
 				{list.map((item, index) => (
 					<Link

@@ -1,4 +1,5 @@
 import { BarChart } from "@mantine/charts";
+import { Alert } from "@mantine/core";
 const data = [
 	{ month: "January", Smartphones: 1200, Laptops: 900, Tablets: 200 },
 	{ month: "February", Smartphones: 1900, Laptops: 1200, Tablets: 400 },
@@ -10,18 +11,21 @@ const data = [
 
 function StatisticVolume() {
 	return (
-		<BarChart
-			h={400}
-			data={data}
-			dataKey="month"
-			orientation="vertical"
-			yAxisProps={{ width: 80 }}
-			barProps={{ radius: 10 }}
-			series={[
-				{ name: "Smartphones", color: "blue.6" },
-				{ name: "Tablets", color: "indigo.6" },
-			]}
-		/>
+		<>
+			<Alert variant="filled" color="red" title="Đang phát triển"></Alert>
+			<BarChart
+				h={400}
+				data={data}
+				dataKey="month"
+				orientation="vertical"
+				yAxisProps={{ width: 80 }}
+				barProps={{ radius: 10 }}
+				series={[
+					{ name: "Smartphones", color: "blue.6" },
+					{ name: "Tablets", color: "indigo.6" },
+				]}
+			/>
+		</>
 	);
 }
 

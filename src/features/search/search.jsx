@@ -31,7 +31,6 @@ const Search = ({ search, setSearch, isLoading, date, setDate }) => {
 			wrap="nowrap"
 		>
 			<Input
-				grow
 				color={isLoading ? "gray" : "blue"}
 				w="100%"
 				placeholder="Tìm kiếm: Số tiền, Nội dung, Mã giao dịch, Ngân hàng"

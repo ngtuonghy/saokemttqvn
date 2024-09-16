@@ -75,7 +75,7 @@ export const MainLayout = ({ children }) => {
 					opened && toggle();
 				}}
 			>
-				<AppShell.Section grow component={ScrollArea}>
+				<AppShell.Section component={ScrollArea}>
 					<Navbar />
 				</AppShell.Section>
 				<AppShell.Section hiddenFrom="sm">

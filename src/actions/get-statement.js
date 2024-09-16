@@ -76,6 +76,6 @@ const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
 		},
 	});
 	prisma.$disconnect();
-	return data;
+	return JSON.parse(JSON.stringify(data));
 };
 export { getStatement };
