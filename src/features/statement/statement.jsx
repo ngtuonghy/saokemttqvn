@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {
 	Center,
+	Highlight,
 	Notification,
 	NumberFormatter,
 	Stack,
@@ -82,9 +83,15 @@ export function Statement({ search, setIsLoading, isLoading, date, setDate }) {
 					// suffix=" ₫"
 				/>
 			</Table.Td>
-			<Table.Td>{element.description}</Table.Td>
-			<Table.Td>{element.name_bank}</Table.Td>
-			<Table.Td>{element.doc_no}</Table.Td>
+			<Table.Td>
+				<Highlight highlight={search.string}>{element.description}</Highlight>
+			</Table.Td>
+			<Table.Td>
+				<Highlight highlight={search.string}>{element.name_bank}</Highlight>
+			</Table.Td>
+			<Table.Td>
+				<Highlight highlight={search.string}>{element.doc_no}</Highlight>
+			</Table.Td>
 			<Table.Td>{element.page_number}</Table.Td>
 		</Table.Tr>
 	));
