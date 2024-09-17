@@ -68,11 +68,11 @@ const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
 	// console.log(dateFilter);
 	const data = await prisma.statement.findMany({
 		skip: (offSet - 1) * p,
-		orderBy: [
-			{
-				page_number: "asc",
-			},
-		],
+		// orderBy: [
+		// 	{
+		// 		page_number: "asc",
+		// 	},
+		// ],
 
 		take: p,
 		where: {
