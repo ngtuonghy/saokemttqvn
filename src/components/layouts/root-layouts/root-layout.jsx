@@ -17,10 +17,10 @@ import {
 import { IconBrandGithub, IconEyeCode } from "@tabler/icons-react";
 import Navbar from "./navbar";
 import Link from "next/link";
-import { readJsonFile } from "@/actions/read-json";
 import { useEffect, useState } from "react";
 import { IconSun, IconMoonStars } from "@tabler/icons-react";
 import { SunIcon } from "@/components/svgs";
+import logs from "@/assets/logs/changelog.json";
 
 export const MainLayout = ({ children }) => {
 	const [opened, { toggle }] = useDisclosure();
@@ -87,10 +87,7 @@ function SourceData() {
 	const [data, setData] = useState([]);
 
 	useEffect(() => {
-		const fetchData = async () => {
-			await readJsonFile().then((res) => setData(res));
-		};
-		fetchData();
+		setData(logs);
 	}, []);
 
 	return (
