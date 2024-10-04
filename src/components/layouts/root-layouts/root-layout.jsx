@@ -71,7 +71,7 @@ export const MainLayout = ({ children }) => {
 					<Navbar />
 				</AppShell.Section>
 				<AppShell.Section hiddenFrom="sm">
-					<Group justify="center" classname="mantine-hidden-from-md">
+					<Group justify="center" className="mantine-hidden-from-md">
 						<HeaderInfo />
 					</Group>
 				</AppShell.Section>
