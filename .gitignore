@@ -43,3 +43,4 @@ scripts/*.pdf
 *.tsbuildinfo
 next-env.d.ts
 
+*.csv

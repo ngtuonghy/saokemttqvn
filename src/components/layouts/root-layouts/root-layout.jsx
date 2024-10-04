@@ -1,44 +1,30 @@
 "use client";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage, useMediaQuery } from "@mantine/hooks";
 import {
 	ActionIcon,
 	Anchor,
 	AppShell,
 	Burger,
+	Center,
+	Drawer,
 	Group,
-	Popover,
+	Indicator,
+	List,
 	ScrollArea,
-	Text,
 	Title,
+	useMantineColorScheme,
 } from "@mantine/core";
-import { IconBrandGithub, IconInfoCircle } from "@tabler/icons-react";
+import { IconBrandGithub, IconEyeCode } from "@tabler/icons-react";
 import Navbar from "./navbar";
 import Link from "next/link";
-export const HeaderInfo = () => {
-	return (
-		<>
-			<Anchor
-				variant="gradient"
-				gradient={{ from: "pink", to: "yellow" }}
-				fw={500}
-			>
-				bởi ngtuonghy
-			</Anchor>
-			<ActionIcon
-				variant="transparent"
-				color="dark"
-				component="a"
-				href="https://github.com/ngtuonghy"
-				target="_blank"
-				aria-label="Open in a new tab"
-			>
-				<IconBrandGithub />
-			</ActionIcon>
-		</>
-	);
-};
+import { readJsonFile } from "@/actions/read-json";
+import { useEffect, useState } from "react";
+import { IconSun, IconMoonStars } from "@tabler/icons-react";
+import { SunIcon } from "@/components/svgs";
+
 export const MainLayout = ({ children }) => {
 	const [opened, { toggle }] = useDisclosure();
+	const matches = useMediaQuery("(min-width: 56.25em)");
 	return (
 		<AppShell
 			header={{ height: 60 }}
@@ -64,44 +50,28 @@ export const MainLayout = ({ children }) => {
 								Sao kê MTTQVN
 							</Title>
 						</Link>
-						<Popover
-							hiddenFrom="sm"
-							width={200}
-							position="bottom"
-							withArrow
-							shadow="md"
-						>
-							<Popover.Target>
-								<ActionIcon variant="transparent">
-									<IconInfoCircle stroke={2} />
-								</ActionIcon>
-							</Popover.Target>
-							<Popover.Dropdown>
-								<Text size="md">VCB của MTTQ từ 1/9/2024 - 10/9/2024</Text>
-							</Popover.Dropdown>
-						</Popover>
-
-						<Title order={3} size="sm" className="mantine-visible-from-md">
-							VCB của MTTQ từ 1/9/2024 - 10/9/2024
-						</Title>
+						<SourceData />
 					</Group>
-					<Group className="mantine-visible-from-md">
-						<HeaderInfo />
+					<Group>
+						<Group className="mantine-visible-from-md">
+							<HeaderInfo />
+						</Group>
+						<ColorSchemeToggle />
 					</Group>
 				</Group>
 			</AppShell.Header>
 
 			<AppShell.Navbar
 				p="md"
-				onClick={() => {
-					opened && toggle();
-				}}
+				// onClick={() => {
+				// 	opened
+				// }}
 			>
 				<AppShell.Section grow component={ScrollArea}>
 					<Navbar />
 				</AppShell.Section>
 				<AppShell.Section hiddenFrom="sm">
-					<Group justify="center" className="mantine-hidden-from-md">
+					<Group justify="center" classname="mantine-hidden-from-md">
 						<HeaderInfo />
 					</Group>
 				</AppShell.Section>
@@ -109,5 +79,106 @@ export const MainLayout = ({ children }) => {
 
 			<AppShell.Main>{children}</AppShell.Main>
 		</AppShell>
+	);
+};
+
+function SourceData() {
+	const [opened, { open, close }] = useDisclosure(false);
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			await readJsonFile().then((res) => setData(res));
+		};
+		fetchData();
+	}, []);
+
+	return (
+		<>
+			<Drawer
+				position="bottom"
+				opened={opened}
+				onClose={close}
+				size="xs"
+				title={
+					<Group onClick={open} className="cursor-pointer text-pink-500">
+						<Title order={4}>Nguồn dữ liệu({data.length})</Title>
+					</Group>
+				}
+				// scrollAreaComponent={ScrollArea}
+				transitionProps={{
+					transition: "slide-up",
+					duration: 150,
+					timingFunction: "linear",
+				}}
+			>
+				<Center>
+					<List size="lg">
+						{data.map((item, index) => (
+							<List.Item key={index}>{item.file}</List.Item>
+						))}
+					</List>
+				</Center>
+			</Drawer>
+
+			<Group onClick={open} className="cursor-pointer text-pink-500">
+				<Indicator label="new" inline processing color="red" size={12}>
+					<IconEyeCode stroke={2} size={30} />
+				</Indicator>
+				<Title order={5} className="mantine-visible-from-md">
+					Xem nguồn dữ liệu({data.length})
+				</Title>
+			</Group>
+		</>
+	);
+}
+
+function ColorSchemeToggle() {
+	const { setColorScheme, clearColorScheme } = useMantineColorScheme();
+	const [scheme, setScheme] = useLocalStorage({
+		key: "color-scheme",
+		defaultValue: "light",
+	});
+	useEffect(() => {
+		setColorScheme(scheme);
+	}, [scheme]);
+
+	const toggleColorScheme = () => {
+		setScheme((current) => (current === "dark" ? "light" : "dark"));
+		// setColorScheme(scheme);
+	};
+
+	return (
+		<ActionIcon variant="transparent" onClick={toggleColorScheme}>
+			{scheme === "dark" ? (
+				<IconMoonStars />
+			) : (
+				<SunIcon className="animate-spin-slow" />
+			)}
+		</ActionIcon>
+	);
+}
+
+export const HeaderInfo = () => {
+	return (
+		<>
+			<Anchor
+				variant="gradient"
+				gradient={{ from: "yellow", to: "pink" }}
+				fw={600}
+			>
+				bởi ngtuonghy
+			</Anchor>
+			<ActionIcon
+				variant="transparent"
+				color="dark"
+				component="a"
+				href="https://github.com/ngtuonghy"
+				target="_blank"
+				aria-label="Open in a new tab"
+			>
+				<IconBrandGithub />
+			</ActionIcon>
+		</>
 	);
 };

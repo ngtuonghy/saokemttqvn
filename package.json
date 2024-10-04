@@ -7,30 +7,41 @@
 		"dev": "next dev",
 		"build": "prisma generate && next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"prismaDev": "dotenv -e .env.local prisma migrate dev ",
+		"prismaMigrate": "dotenv -e .env.local prisma migrate dev --name init",
+		"prismaGenerate": "dotenv -e .env.local prisma generate",
+		"createData": "node seeds/create-data.js"
 	},
 	"dependencies": {
 		"@mantine/charts": "^7.12.2",
 		"@mantine/core": "^7.12.2",
 		"@mantine/dates": "^7.12.2",
 		"@mantine/hooks": "^7.12.2",
-		"@prisma/client": "^5.19.1",
+		"@prisma/client": "^5.20.0",
 		"@tabler/icons-react": "^3.17.0",
+		"csv-parser": "^3.0.0",
 		"date-fns": "^3.6.0",
 		"dayjs": "^1.11.13",
+		"dotenv-cli": "^7.4.2",
 		"lodash": "^4.17.21",
 		"next": "14.2.11",
-		"pdf-parse-new": "^1.3.6",
+		"p-limit": "^6.1.0",
 		"react": "^18",
 		"react-dom": "^18",
 		"react-infinite-scroll-component": "^6.1.0",
 		"recharts": "^2.12.7"
 	},
 	"devDependencies": {
+		"@fdocs/extractor": "^1.0.1",
+		"@svgr/webpack": "^8.1.0",
+		"@types/react": "^18.3.10",
+		"autoprefixer": "^10.4.20",
 		"eslint": "^8",
 		"eslint-config-next": "14.2.11",
-		"postcss": "^8",
-		"prisma": "^5.19.1",
-		"tailwindcss": "^3.4.1"
-	}
+		"postcss": "^8.4.47",
+		"prisma": "^5.20.0",
+		"tailwindcss": "^3.4.12"
+	},
+	"packageManager": "pnpm@9.12.0+sha512.4abf725084d7bcbafbd728bfc7bee61f2f791f977fd87542b3579dcb23504d170d46337945e4c66485cd12d588a0c0e570ed9c477e7ccdd8507cf05f3f92eaca"
 }

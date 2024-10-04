@@ -6,7 +6,6 @@ import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/dates/styles.css";
 import { MainLayout } from "@/components/layouts/root-layouts";
-
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
 	variable: "--font-geist-sans",
@@ -20,7 +19,7 @@ const geistMono = localFont({
 
 export const metadata = {
 	title: "Sao kê MTTQVN ",
-	description: "Sao kê MTTQVN",
+	description: "Sao kê MTTQVN | ngtuonghy",
 };
 
 export default function RootLayout({ children }) {

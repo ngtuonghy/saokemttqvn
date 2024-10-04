@@ -1,30 +1,63 @@
-import { BarChart } from "@mantine/charts";
-import { Alert } from "@mantine/core";
-const data = [
-	{ month: "January", Smartphones: 1200, Laptops: 900, Tablets: 200 },
-	{ month: "February", Smartphones: 1900, Laptops: 1200, Tablets: 400 },
-	{ month: "March", Smartphones: 400, Laptops: 1000, Tablets: 200 },
-	{ month: "April", Smartphones: 1000, Laptops: 200, Tablets: 800 },
-	{ month: "May", Smartphones: 800, Laptops: 1400, Tablets: 1200 },
-	{ month: "June", Smartphones: 750, Laptops: 600, Tablets: 1000 },
-];
+"use client";
+import React, { useEffect } from "react";
+import { getTotalTransactionsByDate } from "@/actions/get-statement";
+import { LineChart } from "@mantine/charts";
+import { Container, Text } from "@mantine/core";
+import { format } from "date-fns";
 
 function StatisticVolume() {
+	const [totalTransactions, setTotalTransactions] = React.useState([]);
+	useEffect(() => {
+		const fetchData = async () => {
+			await getTotalTransactionsByDate().then((res) => {
+				const formattedData = res.map((transaction) => ({
+					transaction_date: format(
+						new Date(transaction.transaction_date),
+						"dd/MM/yyyy",
+					),
+					"Tổng số tiền": parseFloat(transaction.total_credit_amount),
+				}));
+
+				setTotalTransactions(formattedData);
+			});
+		};
+		fetchData();
+	}, []);
+
+	const error = console.error;
+	console.error = (...args) => {
+		if (/defaultProps/.test(args[0])) return;
+		error(...args);
+	};
 	return (
 		<>
-			<Alert variant="filled" color="red" title="Đang phát triển"></Alert>
-			<BarChart
-				h={400}
-				data={data}
-				dataKey="month"
-				orientation="vertical"
-				yAxisProps={{ width: 80 }}
-				barProps={{ radius: 10 }}
-				series={[
-					{ name: "Smartphones", color: "blue.6" },
-					{ name: "Tablets", color: "indigo.6" },
-				]}
-			/>
+			<Container>
+				<Text align="center" weight={700} size="xl">
+					{" "}
+					Thống kê số tiền giao dịch theo ngày (VNĐ)
+				</Text>
+				<LineChart
+					mt={10}
+					h={400}
+					data={totalTransactions}
+					dataKey="transaction_date"
+					type="gradient"
+					gradientStops={[
+						{ offset: 0, color: "red.6" },
+						{ offset: 20, color: "orange.6" },
+						{ offset: 40, color: "yellow.5" },
+						{ offset: 70, color: "lime.5" },
+						{ offset: 80, color: "cyan.5" },
+						{ offset: 100, color: "blue.5" },
+					]}
+					strokeWidth={5}
+					curveType="natural"
+					series={[{ name: "Tổng số tiền", color: "blue.6" }]}
+					valueFormatter={(value) =>
+						new Intl.NumberFormat("vi-VN").format(value)
+					}
+				/>
+			</Container>
 		</>
 	);
 }

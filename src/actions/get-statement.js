@@ -1,91 +1,117 @@
 "use server";
-
 import { prisma } from "@/libs/prisma";
-import { format, isDate } from "date-fns";
-
-const formatDate = (date) => {
-	if (!isDate(date)) {
-		return undefined;
-	}
-	const fmt = format(new Date(date), "yyyy-MM-dd");
-	return new Date(fmt);
-};
 
 const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
 	prisma.$connect();
 	const p = 20;
-
 	const conditions = [];
 
-	if (search.trim()) {
+	if (search) {
 		conditions.push(
 			{
-				doc_no: {
+				no: {
 					contains: search,
 					mode: "insensitive",
 				},
 			},
 			{
-				name_bank: {
+				transaction_description: {
 					contains: search,
 					mode: "insensitive",
 				},
 			},
 			{
-				description: {
+				reference_name: {
 					contains: search,
 					mode: "insensitive",
 				},
 			},
 		);
-	}
-	if (isNaN(parseInt(search)) === false) {
-		conditions.push({
-			credit: {
-				equals: parseInt(search),
-			},
-			balance: {
-				equals: parseInt(search),
-			},
-		});
+
+		if (!isNaN(parseInt(search))) {
+			conditions.push({
+				OR: [
+					{ credit_amount: { equals: parseInt(search) } },
+					{ balance_amount: { equals: parseInt(search) } },
+				],
+			});
+		}
 	}
 
 	let dateFilter = {};
 	if (date) {
-		const startDate = formatDate(date[0]);
-		const endDate = formatDate(date[1]);
+		const [startDate, endDate] = date;
 		if (startDate && endDate) {
-			dateFilter = {
-				gte: startDate,
-				lte: endDate,
-			};
+			dateFilter = { gte: startDate, lte: endDate };
 		} else if (startDate) {
-			dateFilter = {
-				equals: startDate,
-			};
+			dateFilter = { equals: startDate };
 		}
 	}
-	// console.log(dateFilter);
+
+	let orderBy = [];
+	if (search) {
+		orderBy = [
+			{
+				credit_amount: "desc",
+			},
+			{
+				transaction_description: "asc",
+			},
+		];
+	} else {
+		orderBy = [
+			{
+				transaction_date: "desc",
+				// credit_amount: "asc",
+			},
+		];
+	}
+
 	const data = await prisma.statement.findMany({
 		skip: (offSet - 1) * p,
-		// orderBy: [
-		// 	{
-		// 		page_number: "asc",
-		// 	},
-		// ],
-
 		take: p,
+		orderBy,
 		where: {
-			OR: conditions.length > 0 ? conditions : undefined,
-			date: Object.entries(dateFilter).length === 0 ? undefined : dateFilter,
-			...(banksName.length > 0 && {
-				name_bank: {
-					in: banksName,
-				},
-			}),
+			AND: [
+				conditions.length > 0 ? { OR: conditions } : undefined,
+				Object.keys(dateFilter).length > 0
+					? { transaction_date: dateFilter }
+					: undefined,
+				banksName.length > 0 ? { bank_name: { in: banksName } } : undefined,
+			].filter(Boolean),
 		},
 	});
+
 	prisma.$disconnect();
 	return JSON.parse(JSON.stringify(data));
 };
-export { getStatement };
+
+const getBanks = async () => {
+	prisma.$connect();
+	const banks = await prisma.statement.findMany({
+		select: {
+			bank_name: true,
+		},
+		distinct: ["bank_name"],
+	});
+	return banks;
+};
+
+async function getTotalTransactionsByDate() {
+	prisma.$connect;
+	const totals = await prisma.$queryRaw`
+    SELECT 
+        DATE(transaction_date) AS transaction_date, 
+        SUM(credit_amount) AS total_credit_amount 
+    FROM 
+        "Statement"  
+    GROUP BY 
+        DATE(transaction_date)
+    ORDER BY 
+        transaction_date ASC; 
+`;
+
+	return totals;
+}
+
+export { getStatement, getBanks, getTotalTransactionsByDate };
