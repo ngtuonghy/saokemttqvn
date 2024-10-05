@@ -30,7 +30,8 @@
 		"react": "^18",
 		"react-dom": "^18",
 		"react-infinite-scroll-component": "^6.1.0",
-		"recharts": "^2.12.7"
+		"recharts": "^2.12.7",
+		"zustand": "5.0.0-rc.2"
 	},
 	"devDependencies": {
 		"@fdocs/extractor": "^1.0.1",

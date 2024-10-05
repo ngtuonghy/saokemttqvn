@@ -17,7 +17,9 @@ import React from "react";
 
 import { usePathname } from "next/navigation";
 import { useWindowScroll } from "@mantine/hooks";
+import { useAppShell } from "@/stores/app-shell";
 const Navbar = () => {
+	const { opened, toggle } = useAppShell();
 	const pathname = usePathname();
 	const [scroll, scrollTo] = useWindowScroll();
 	const list = [
@@ -46,6 +48,9 @@ const Navbar = () => {
 bord ${pathname === item.url ? "border-[var(--mantine-color-blue-6)] border-b-4" : null} anmation duration-300`}
 						component="a"
 						href={item.url}
+						onClick={() => {
+							opened && toggle();
+						}}
 					>
 						<ActionIcon size="xl" variant="light">
 							{item.icon}

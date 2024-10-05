@@ -1,5 +1,5 @@
 "use client";
-import { useDisclosure, useLocalStorage, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
 import {
 	ActionIcon,
 	Anchor,
@@ -11,6 +11,7 @@ import {
 	Indicator,
 	List,
 	ScrollArea,
+	Spoiler,
 	Title,
 	useMantineColorScheme,
 } from "@mantine/core";
@@ -18,13 +19,19 @@ import { IconBrandGithub, IconEyeCode } from "@tabler/icons-react";
 import Navbar from "./navbar";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { IconSun, IconMoonStars } from "@tabler/icons-react";
-import { SunIcon } from "@/components/svgs";
+import { IconMoonStars } from "@tabler/icons-react";
+import {
+	BidvWordmark,
+	MttqvnLogo,
+	SunIcon,
+	VietcombankWordmark,
+	VietinbankWordmark,
+} from "@/components/svgs";
 import logs from "@/assets/logs/changelog.json";
+import { useAppShell } from "@/stores/app-shell";
 
 export const MainLayout = ({ children }) => {
-	const [opened, { toggle }] = useDisclosure();
-	const matches = useMediaQuery("(min-width: 56.25em)");
+	const { opened, toggle } = useAppShell();
 	return (
 		<AppShell
 			header={{ height: 60 }}
@@ -90,40 +97,78 @@ function SourceData() {
 		setData(logs);
 	}, []);
 
+	const bankWorkmark = {
+		vietcombank: VietcombankWordmark,
+		vietinbank: VietinbankWordmark,
+		bidv: BidvWordmark,
+	};
+
+	const isWorkMark = (bankName) => {
+		const LogoComponent = bankWorkmark[bankName];
+		if (LogoComponent) {
+			return <LogoComponent />;
+		}
+		return bankName;
+	};
+
 	return (
 		<>
 			<Drawer
 				position="bottom"
 				opened={opened}
 				onClose={close}
-				size="xs"
+				size="md"
 				title={
 					<Group onClick={open} className="cursor-pointer text-pink-500">
-						<Title order={4}>Nguồn dữ liệu({data.length})</Title>
+						<Title order={4}>
+							Nguồn dữ liệu (
+							{Object.keys(data).reduce(
+								(acc, key) => acc + data[key].length,
+								0,
+							)}
+							)
+						</Title>
 					</Group>
 				}
-				// scrollAreaComponent={ScrollArea}
 				transitionProps={{
 					transition: "slide-up",
 					duration: 150,
 					timingFunction: "linear",
 				}}
 			>
+				{/* <MttqvnLogo className="w-11 h-11" /> */}
 				<Center>
 					<List size="lg">
-						{data.map((item, index) => (
-							<List.Item key={index}>{item.file}</List.Item>
+						{Object.keys(data).map((key, index) => (
+							<List.Item className="p-2" key={index}>
+								<List size="lg">
+									<Spoiler
+										maxHeight={122}
+										showLabel="Hiển thị thêm"
+										hideLabel="Ẩn bớt"
+									>
+										<Title order={5}>
+											<Group>
+												{isWorkMark(key)}({data[key].length})
+											</Group>
+										</Title>
+										{data[key].map((item, index) => (
+											<List.Item key={index}>{item.file}</List.Item>
+										))}
+									</Spoiler>
+								</List>
+							</List.Item>
 						))}
 					</List>
 				</Center>
 			</Drawer>
-
 			<Group onClick={open} className="cursor-pointer text-pink-500">
 				<Indicator label="new" inline processing color="red" size={12}>
 					<IconEyeCode stroke={2} size={30} />
 				</Indicator>
 				<Title order={5} className="mantine-visible-from-md">
-					Xem nguồn dữ liệu({data.length})
+					Xem nguồn dữ liệu (
+					{Object.keys(data).reduce((acc, key) => acc + data[key].length, 0)})
 				</Title>
 			</Group>
 		</>
