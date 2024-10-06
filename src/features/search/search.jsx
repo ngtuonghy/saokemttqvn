@@ -24,12 +24,13 @@ import { DatePickerInput, DatesProvider } from "@mantine/dates";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { getBanks } from "@/actions/get-statement";
 import { useStatement } from "@/context/statement-data";
+import logs from "@/assets/logs/changelog.json";
 
 const Search = () => {
 	const { loading } = useStatement();
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [date, setDate] = React.useState([null, null]);
-	const [banks, setBanks] = React.useState(["t"]);
+	const [banks, setBanks] = React.useState(Object.keys(logs));
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -68,12 +69,12 @@ const Search = () => {
 		}
 	};
 
-	useEffect(() => {
-		getBanks().then((data) => {
-			setBanks(data.map((item) => item.bank_name));
-		});
-	}, []);
-
+	// useEffect(() => {
+	// 	getBanks().then((data) => {
+	// 		setBanks(data.map((item) => item.bank_name));
+	// 	});
+	// }, []);
+	//
 	useEffect(() => {
 		if (searchParams.get("q"))
 			setSearch((va) => ({ ...va, string: searchParams.get("q") || "" }));
