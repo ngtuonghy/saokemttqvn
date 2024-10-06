@@ -6,6 +6,7 @@ import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
 import "@mantine/dates/styles.css";
 import { MainLayout } from "@/components/layouts/root-layouts";
+import { ContextProvider } from "@/context";
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
 	variable: "--font-geist-sans",
@@ -30,7 +31,9 @@ export default function RootLayout({ children }) {
 				suppressHydrationWarning={true}
 			>
 				<MantineProvider theme={theme}>
-					<MainLayout>{children}</MainLayout>
+					<ContextProvider>
+						<MainLayout>{children}</MainLayout>
+					</ContextProvider>
 				</MantineProvider>
 			</body>
 		</html>

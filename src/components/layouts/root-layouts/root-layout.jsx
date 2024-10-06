@@ -28,7 +28,7 @@ import {
 	VietinbankWordmark,
 } from "@/components/svgs";
 import logs from "@/assets/logs/changelog.json";
-import { useAppShell } from "@/stores/app-shell";
+import { useAppShell } from "@/context/app-shell";
 
 export const MainLayout = ({ children }) => {
 	const { opened, toggle } = useAppShell();

@@ -1,7 +1,7 @@
 "use server";
 import { prisma } from "@/libs/prisma";
 
-const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
+const getStatement = async (offSet = 1, search = "", date, banksName) => {
 	prisma.$connect();
 	const p = 20;
 	const conditions = [];
@@ -77,7 +77,7 @@ const getStatement = async (offSet = 1, search = "", date, banksName = "") => {
 				Object.keys(dateFilter).length > 0
 					? { transaction_date: dateFilter }
 					: undefined,
-				banksName.length > 0 ? { bank_name: { in: banksName } } : undefined,
+				banksName ? { bank_name: { in: banksName } } : undefined,
 			].filter(Boolean),
 		},
 	});

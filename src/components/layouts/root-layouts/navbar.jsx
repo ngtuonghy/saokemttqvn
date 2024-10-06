@@ -17,7 +17,7 @@ import React from "react";
 
 import { usePathname } from "next/navigation";
 import { useWindowScroll } from "@mantine/hooks";
-import { useAppShell } from "@/stores/app-shell";
+import { useAppShell } from "@/context/app-shell";
 const Navbar = () => {
 	const { opened, toggle } = useAppShell();
 	const pathname = usePathname();

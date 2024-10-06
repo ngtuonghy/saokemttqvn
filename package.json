@@ -24,14 +24,12 @@
 		"date-fns": "^3.6.0",
 		"dayjs": "^1.11.13",
 		"dotenv-cli": "^7.4.2",
-		"lodash": "^4.17.21",
 		"next": "14.2.11",
 		"p-limit": "^6.1.0",
 		"react": "^18",
 		"react-dom": "^18",
 		"react-infinite-scroll-component": "^6.1.0",
-		"recharts": "^2.12.7",
-		"zustand": "5.0.0-rc.2"
+		"recharts": "^2.12.7"
 	},
 	"devDependencies": {
 		"@fdocs/extractor": "^1.0.1",

@@ -23,8 +23,10 @@ import { useDisclosure, useInputState } from "@mantine/hooks";
 import { DatePickerInput, DatesProvider } from "@mantine/dates";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { getBanks } from "@/actions/get-statement";
+import { useStatement } from "@/context/statement-data";
 
-const Search = ({ isLoading }) => {
+const Search = () => {
+	const { loading } = useStatement();
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [date, setDate] = React.useState([null, null]);
 	const [banks, setBanks] = React.useState(["t"]);
@@ -35,14 +37,8 @@ const Search = ({ isLoading }) => {
 		string: "",
 		banksName: "",
 	});
+	const params = new URLSearchParams(searchParams.toString());
 	useEffect(() => {
-		const params = new URLSearchParams(searchParams.toString());
-		if (search.string) {
-			params.set("q", search.string);
-		} else {
-			params.delete("q");
-		}
-
 		if (date[0] && date[1]) {
 			params.set("from", date[0].toISOString());
 			params.set("to", date[1].toISOString());
@@ -58,13 +54,35 @@ const Search = ({ isLoading }) => {
 		}
 
 		router.replace(pathname + "?" + params.toString());
-	}, [search, date]);
+	}, [date, search.banksName]);
+
+	const handleKeyPress = async (event) => {
+		if (event.key === "Enter") {
+			const params = new URLSearchParams(searchParams.toString());
+			if (search.string) {
+				params.set("q", search.string);
+			} else {
+				params.delete("q");
+			}
+			router.replace(pathname + "?" + params.toString());
+		}
+	};
 
 	useEffect(() => {
 		getBanks().then((data) => {
 			setBanks(data.map((item) => item.bank_name));
 		});
 	}, []);
+
+	useEffect(() => {
+		if (searchParams.get("q"))
+			setSearch((va) => ({ ...va, string: searchParams.get("q") || "" }));
+		if (searchParams.get("bank"))
+			setSearch((va) => ({
+				...va,
+				banksName: searchParams.get("bank").split(",") || [],
+			}));
+	}, [searchParams.get("q"), searchParams.get("bank")]);
 
 	return (
 		<Group
@@ -75,11 +93,12 @@ const Search = ({ isLoading }) => {
 			wrap="nowrap"
 		>
 			<Input
-				color={isLoading ? "gray" : "blue"}
+				onKeyDown={handleKeyPress}
+				color={loading ? "gray" : "blue"}
 				w="100%"
 				placeholder="Tìm kiếm: Số tiền, Nội dung, Mã giao dịch, Ngân hàng"
 				leftSection={
-					isLoading ? (
+					loading ? (
 						<Loader color="blue" type="dots" size="sm" />
 					) : (
 						<IconSearch stroke={2} />
@@ -93,7 +112,11 @@ const Search = ({ isLoading }) => {
 				rightSection={
 					<CloseButton
 						aria-label="Clear input"
-						onClick={() => setSearch((va) => ({ ...va, string: "" }))}
+						onClick={() => {
+							setSearch((va) => ({ ...va, string: "" }));
+							params.delete("q");
+							router.replace(pathname + "?" + params.toString());
+						}}
 						style={{ display: search.string ? undefined : "none" }}
 					/>
 				}

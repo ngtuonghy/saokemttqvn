@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
 	Center,
 	Highlight,
@@ -11,85 +11,25 @@ import {
 } from "@mantine/core";
 import { format } from "date-fns";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce } from "lodash";
-import { getStatement } from "@/actions/get-statement";
 import StatementLoading from "./statement-loading";
 import { IconError404 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 
 import { BidvLogo, VietcombankLogo, VietinbankLogo } from "@/components/svgs";
+import { useStatement } from "@/context/statement-data";
 
 const formatDate = (date) => {
 	return format(new Date(date), "dd/MM/yyyy");
 };
 
-export function Statement({ setIsLoading, isLoading }) {
-	const [statement, setStatement] = useState([]);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [isFetching, setIsFetching] = useState(false);
+export function Statement() {
+	const { data, fetchData, loading, fetchMoreData, hasMore } = useStatement();
 	const searchParams = useSearchParams();
+	const search = searchParams.get("q") || "";
 
 	useEffect(() => {
-		setIsLoading(true);
-		const fetchData = async () => {
-			const statement = await getStatement(1, searchParams.get("q"));
-			setStatement(statement);
-		};
 		fetchData();
-		setIsFetching(true);
-	}, []);
-
-	const debouncedFetchData = debounce(async (query, date, banksName) => {
-		try {
-			setStatement([]);
-			setIsLoading(true);
-			const result = await getStatement(1, query, date, banksName);
-			setPage(1);
-			if (result.length < 20) {
-				setHasMore(false);
-			} else {
-				setHasMore(true);
-			}
-			setStatement(result);
-			setIsLoading(false);
-		} catch (error) {
-			setIsLoading(false);
-			console.error("Error fetching data:", error);
-		}
-	}, 500);
-
-	const search = useSearchParams().get("q") || "";
-	const date = searchParams.get("from")
-		? [new Date(searchParams.get("from")), new Date(searchParams.get("to"))]
-		: [null, null];
-	const banks = searchParams.get("bank")
-		? searchParams.get("bank").split(",")
-		: [];
-
-	useEffect(() => {
-		debouncedFetchData(searchParams.get("q"), date, banks);
-		return () => {
-			debouncedFetchData.cancel();
-		};
 	}, [search, searchParams.get("from"), searchParams.get("bank")]);
-
-	const fetchMoreData = async () => {
-		let newStatement;
-		if (search || date || banks) {
-			// setStatement([]);
-			newStatement = await getStatement(page + 1, search, date, banks);
-		} else {
-			newStatement = await getStatement(page + 1);
-		}
-		setPage(page + 1);
-		if (newStatement.length === 0) {
-			setHasMore(false);
-			return;
-		}
-
-		setStatement((prev) => [...prev, ...newStatement]);
-	};
 
 	const bankLogos = {
 		vietcombank: VietcombankLogo,
@@ -105,7 +45,7 @@ export function Statement({ setIsLoading, isLoading }) {
 		return bankName;
 	};
 
-	const rows = statement.map((element) => (
+	const rows = data.map((element) => (
 		<Table.Tr key={element.id}>
 			<Table.Td>
 				<Highlight highlight={search}>{element.no}</Highlight>
@@ -134,7 +74,7 @@ export function Statement({ setIsLoading, isLoading }) {
 
 	return (
 		<InfiniteScroll
-			dataLength={statement.length}
+			dataLength={data.length}
 			next={fetchMoreData}
 			hasMore={hasMore}
 			loader={<StatementLoading />}
@@ -153,7 +93,7 @@ export function Statement({ setIsLoading, isLoading }) {
 					</Table.Thead>
 					<Table.Tbody>{rows}</Table.Tbody>
 				</Table>
-				{statement.length === 0 && !isLoading && isFetching && (
+				{data.length === 0 && !loading && (
 					<Center>
 						<Notification
 							icon={<IconError404 stroke={2} />}
