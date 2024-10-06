@@ -1,13 +1,7 @@
 "use client";
 import { getStatement } from "@/actions/get-statement";
 import { useSearchParams } from "next/navigation";
-import {
-	createContext,
-	useContext,
-	useState,
-	useEffect,
-	Suspense,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const context = createContext();
 
@@ -76,22 +70,20 @@ function StatementProvider({ children }) {
 	};
 
 	return (
-		<Suspense>
-			<context.Provider
-				value={{
-					setData,
-					setPage,
-					data,
-					loading,
-					error,
-					fetchMoreData,
-					fetchData,
-					hasMore,
-				}}
-			>
-				{children}
-			</context.Provider>
-		</Suspense>
+		<context.Provider
+			value={{
+				setData,
+				setPage,
+				data,
+				loading,
+				error,
+				fetchMoreData,
+				fetchData,
+				hasMore,
+			}}
+		>
+			{children}
+		</context.Provider>
 	);
 }
 function useStatement() {
