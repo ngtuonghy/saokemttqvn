@@ -22,7 +22,7 @@ import {
 import { useDisclosure, useInputState } from "@mantine/hooks";
 import { DatePickerInput, DatesProvider } from "@mantine/dates";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { getBanks } from "@/actions/get-statement";
+import { getBanks, getDateRange } from "@/actions/get-statement";
 import { useStatement } from "@/context/statement-data";
 import logs from "@/assets/logs/changelog.json";
 
@@ -31,6 +31,7 @@ const Search = () => {
 	const [opened, { toggle, close }] = useDisclosure(false);
 	const [date, setDate] = React.useState([null, null]);
 	const [banks, setBanks] = React.useState(Object.keys(logs));
+	const [dateRange, setDateRange] = React.useState({});
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -69,12 +70,14 @@ const Search = () => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	getBanks().then((data) => {
-	// 		setBanks(data.map((item) => item.bank_name));
-	// 	});
-	// }, []);
-	//
+	useEffect(() => {
+		const fetchData = async () => {
+			const dateRange = await getDateRange();
+			setDateRange(dateRange);
+		};
+		fetchData();
+	}, []);
+
 	useEffect(() => {
 		if (searchParams.get("q"))
 			setSearch((va) => ({ ...va, string: searchParams.get("q") || "" }));
@@ -150,8 +153,8 @@ const Search = () => {
 							label="Chọn ngày"
 							value={date}
 							onChange={setDate}
-							minDate={new Date(2024, 8, 1)}
-							maxDate={new Date(2024, 8, 12)}
+							minDate={dateRange.minDate}
+							maxDate={dateRange.maxDate}
 						/>
 					</DatesProvider>
 					<MultiSelect

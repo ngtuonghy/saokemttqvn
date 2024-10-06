@@ -113,5 +113,19 @@ async function getTotalTransactionsByDate() {
 
 	return totals;
 }
+async function getDateRange() {
+	const transactionDates = await prisma.statement.aggregate({
+		_min: {
+			transaction_date: true,
+		},
+		_max: {
+			transaction_date: true,
+		},
+	});
+	return {
+		minDate: transactionDates._min.transaction_date,
+		maxDate: transactionDates._max.transaction_date,
+	};
+}
 
-export { getStatement, getBanks, getTotalTransactionsByDate };
+export { getStatement, getBanks, getTotalTransactionsByDate, getDateRange };
