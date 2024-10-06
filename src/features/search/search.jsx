@@ -78,15 +78,27 @@ const Search = () => {
 		fetchData();
 	}, []);
 
-	useEffect(() => {
-		if (searchParams.get("q"))
-			setSearch((va) => ({ ...va, string: searchParams.get("q") || "" }));
-		if (searchParams.get("bank"))
-			setSearch((va) => ({
-				...va,
-				banksName: searchParams.get("bank").split(",") || [],
-			}));
-	}, [searchParams.get("q"), searchParams.get("bank")]);
+	useEffect(
+		() => {
+			if (searchParams.get("q"))
+				setSearch((va) => ({ ...va, string: searchParams.get("q") || "" }));
+			if (searchParams.get("bank"))
+				setSearch((va) => ({
+					...va,
+					banksName: searchParams.get("bank").split(",") || [],
+				}));
+
+			if (searchParams.get("from") && searchParams.get("to")) {
+				setDate([
+					new Date(searchParams.get("from")),
+					new Date(searchParams.get("to")),
+				]);
+			}
+		},
+		[searchParams.get("q"), searchParams.get("bank")],
+		searchParams.get("from"),
+		searchParams.get("to"),
+	);
 
 	return (
 		<Group
