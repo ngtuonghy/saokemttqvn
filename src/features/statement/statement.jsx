@@ -53,7 +53,9 @@ export function Statement() {
 	const rows = data.map((element, index) => (
 		<Table.Tr key={index}>
 			<Table.Td>
-				<Highlight highlight={search}>{element.no}</Highlight>
+				<Highlight maw={110} truncate highlight={search}>
+					{element.no}
+				</Highlight>
 			</Table.Td>
 			<Table.Td>{formatDate(element.transaction_date)}</Table.Td>
 			<Table.Td>
@@ -100,7 +102,7 @@ export function Statement() {
 					<Table highlightOnHover>
 						<Table.Thead>
 							<Table.Tr>
-								<Table.Th>Mã giao dịch</Table.Th>
+								<Table.Th vars={"1"}>Mã giao dịch</Table.Th>
 								<Table.Th>Ngày</Table.Th>
 								<Table.Th>Số tiền chuyển (VNĐ)</Table.Th>
 								<Table.Th>Nội dung chi tiết</Table.Th>
