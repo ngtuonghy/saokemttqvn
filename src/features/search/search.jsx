@@ -234,8 +234,8 @@ const Search = () => {
 							}
 						>
 							<Group mt="xs">
-								{banks.map((bank) => (
-									<Checkbox value={bank} label={bank} />
+								{banks.map((bank, index) => (
+									<Checkbox key={index} value={bank} label={bank} />
 								))}
 							</Group>
 						</Checkbox.Group>

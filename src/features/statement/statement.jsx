@@ -87,7 +87,7 @@ export function Statement() {
 	));
 
 	return (
-		<div>
+		<>
 			<Search />
 
 			<InfiniteScroll
@@ -127,7 +127,7 @@ export function Statement() {
 					)}
 				</Stack>
 			</InfiniteScroll>
-		</div>
+		</>
 	);
 }
 
