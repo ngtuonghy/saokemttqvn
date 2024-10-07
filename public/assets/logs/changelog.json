@@ -1,78 +1,190 @@
 {
-  "bidv": [
-    {
-      "file": "Số tiền ủng hộ qua số tài khoản bidv: 1200979797 từ ngày 09/04 đến ngày 09/22/2024",
-      "date": "2024-10-05T06:51:27.435Z",
-      "endDay": "2024-09-21T17:00:00.000Z"
-    },
-    {
-      "file": "Số tiền ủng hộ qua số tài khoản bidv: 1261122666 từ ngày 09/18 đến ngày 09/19/2024",
-      "date": "2024-10-05T06:51:27.905Z",
-      "endDay": "2024-09-18T17:00:00.000Z"
-    },
-    {
-      "file": "Số tiền ủng hộ qua số tài khoản bidv: 1261122666 từ ngày 09/01 đến ngày 09/12/2024",
-      "date": "2024-10-05T06:51:27.887Z",
-      "endDay": "2024-09-11T17:00:00.000Z"
-    }
-  ],
   "vietinbank": [
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietinbank: 111602391111 ngày 09/18/2024",
-      "date": "2024-10-05T15:03:34.974Z",
-      "endDay": "2024-09-17T17:00:00.000Z"
+      "date": "2024-10-07T06:38:24.343Z",
+      "currency": "VND",
+      "endDate": "2024-09-28T17:00:00.000Z",
+      "startDate": "2024-09-23T17:00:00.000Z",
+      "accountNumber": "111602391111"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietinbank: 111602391111 ngày 09/17/2024",
-      "date": "2024-10-05T15:03:34.575Z",
-      "endDay": "2024-09-16T17:00:00.000Z"
+      "date": "2024-10-07T06:38:24.123Z",
+      "currency": "VND",
+      "endDate": "2024-09-22T17:00:00.000Z",
+      "startDate": "2024-09-22T17:00:00.000Z",
+      "accountNumber": "111602391111"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietinbank: 111602391111 ngày 09/16/2024",
-      "date": "2024-10-05T15:03:33.672Z",
-      "endDay": "2024-09-15T17:00:00.000Z"
+      "date": "2024-10-07T06:38:24.003Z",
+      "currency": "VND",
+      "endDate": "2024-09-21T17:00:00.000Z",
+      "startDate": "2024-09-18T17:00:00.000Z",
+      "accountNumber": "111602391111"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietinbank: 111602391111 từ ngày 09/13 đến ngày 09/15/2024",
-      "date": "2024-10-05T15:03:32.749Z",
-      "endDay": "2024-09-14T17:00:00.000Z"
+      "date": "2024-10-07T06:38:22.926Z",
+      "currency": "VND",
+      "endDate": "2024-09-17T17:00:00.000Z",
+      "startDate": "2024-09-17T17:00:00.000Z",
+      "accountNumber": "111602391111"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietinbank: 111602391111 từ ngày 09/10 đến ngày 09/12/2024",
-      "date": "2024-10-05T15:03:25.679Z",
-      "endDay": "2024-09-11T17:00:00.000Z"
+      "date": "2024-10-07T06:38:19.009Z",
+      "currency": "VND",
+      "endDate": "2024-09-16T17:00:00.000Z",
+      "startDate": "2024-09-16T17:00:00.000Z",
+      "accountNumber": "111602391111"
+    },
+    {
+      "date": "2024-10-07T06:38:18.273Z",
+      "currency": "VND",
+      "endDate": "2024-09-15T17:00:00.000Z",
+      "startDate": "2024-09-15T17:00:00.000Z",
+      "accountNumber": "111602391111"
+    },
+    {
+      "date": "2024-10-07T06:38:17.005Z",
+      "currency": "VND",
+      "endDate": "2024-09-14T17:00:00.000Z",
+      "startDate": "2024-09-12T17:00:00.000Z",
+      "accountNumber": "111602391111"
+    },
+    {
+      "date": "2024-10-07T06:38:11.665Z",
+      "currency": "VND",
+      "endDate": "2024-09-11T17:00:00.000Z",
+      "startDate": "2024-09-09T17:00:00.000Z",
+      "accountNumber": "111602391111"
+    }
+  ],
+  "bidv": [
+    {
+      "date": "2024-10-07T08:00:42.910Z",
+      "currency": "VND",
+      "endDate": "2024-09-21T17:00:00.000Z",
+      "startDate": "2024-09-03T17:00:00.000Z",
+      "accountNumber": "1200979797"
+    },
+    {
+      "date": "2024-10-07T06:38:13.634Z",
+      "currency": "VND",
+      "endDate": "2024-09-29T17:00:00.000Z",
+      "startDate": "2024-09-24T17:00:00.000Z",
+      "accountNumber": "1261122666"
+    },
+    {
+      "date": "2024-10-07T06:38:13.599Z",
+      "currency": "VND",
+      "endDate": "2024-09-23T17:00:00.000Z",
+      "startDate": "2024-09-19T17:00:00.000Z",
+      "accountNumber": "1261122666"
+    },
+    {
+      "date": "2024-10-07T06:38:13.590Z",
+      "currency": "VND",
+      "endDate": "2024-09-18T17:00:00.000Z",
+      "startDate": "2024-09-17T17:00:00.000Z",
+      "accountNumber": "1261122666"
+    },
+    {
+      "date": "2024-10-07T06:38:13.568Z",
+      "currency": "VND",
+      "endDate": "2024-09-16T17:00:00.000Z",
+      "startDate": "2024-09-09T17:00:00.000Z",
+      "accountNumber": "1261122666"
+    },
+    {
+      "date": "2024-10-07T06:38:11.757Z",
+      "currency": "VND",
+      "endDate": "2024-09-08T17:00:00.000Z",
+      "startDate": "2024-08-31T17:00:00.000Z",
+      "accountNumber": "1261122666"
     }
   ],
   "vietcombank": [
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietcombank: 0011001932418 từ ngày 09/15 đến ngày 09/23/2024",
-      "date": "2024-10-05T15:06:35.622Z",
-      "endDay": "2024-09-22T17:00:00.000Z"
+      "date": "2024-10-07T06:39:29.495Z",
+      "currency": "VND",
+      "endDate": "2024-09-29T17:00:00.000Z",
+      "startDate": "2024-09-29T17:00:00.000Z",
+      "accountNumber": "0011001932418"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietcombank: 0011001932418 ngày 09/14/2024",
-      "date": "2024-10-05T15:06:14.462Z",
-      "endDay": "2024-09-13T17:00:00.000Z"
+      "date": "2024-10-07T06:39:29.276Z",
+      "currency": "VND",
+      "endDate": "2024-09-28T17:00:00.000Z",
+      "startDate": "2024-09-26T17:00:00.000Z",
+      "accountNumber": "0011001932418"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietcombank: 0011001932418 ngày 09/13/2024",
-      "date": "2024-10-05T15:06:05.872Z",
-      "endDay": "2024-09-12T17:00:00.000Z"
+      "date": "2024-10-07T06:39:28.766Z",
+      "currency": "VND",
+      "endDate": "2024-09-25T17:00:00.000Z",
+      "startDate": "2024-09-25T17:00:00.000Z",
+      "accountNumber": "0011001932418"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietcombank: 0011001932418 ngày 09/12/2024",
-      "date": "2024-10-05T15:04:03.789Z",
-      "endDay": "2024-09-11T17:00:00.000Z"
+      "date": "2024-10-07T06:39:28.488Z",
+      "currency": "VND",
+      "endDate": "2024-09-24T17:00:00.000Z",
+      "startDate": "2024-09-24T17:00:00.000Z",
+      "accountNumber": "0011001932418"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietcombank: 0011001932418 ngày 09/11/2024",
-      "date": "2024-10-05T15:03:51.449Z",
-      "endDay": "2024-09-10T17:00:00.000Z"
+      "date": "2024-10-07T06:39:28.203Z",
+      "currency": "VND",
+      "endDate": "2024-09-23T17:00:00.000Z",
+      "startDate": "2024-09-23T17:00:00.000Z",
+      "accountNumber": "0011001932418"
     },
     {
-      "file": "Số tiền ủng hộ qua số tài khoản vietcombank: 0011001932418 từ ngày 09/01 đến ngày 09/10/2024",
-      "date": "2024-10-05T15:03:34.170Z",
-      "endDay": "2024-09-09T17:00:00.000Z"
+      "date": "2024-10-07T06:39:27.810Z",
+      "currency": "VND",
+      "endDate": "2024-09-22T17:00:00.000Z",
+      "startDate": "2024-09-14T17:00:00.000Z",
+      "accountNumber": "0011001932418"
+    },
+    {
+      "date": "2024-10-07T06:39:09.154Z",
+      "currency": "VND",
+      "endDate": "2024-09-13T17:00:00.000Z",
+      "startDate": "2024-09-13T17:00:00.000Z",
+      "accountNumber": "0011001932418"
+    },
+    {
+      "date": "2024-10-07T06:39:00.866Z",
+      "currency": "VND",
+      "endDate": "2024-09-12T17:00:00.000Z",
+      "startDate": "2024-09-12T17:00:00.000Z",
+      "accountNumber": "0011001932418"
+    },
+    {
+      "date": "2024-10-07T06:38:44.487Z",
+      "currency": "VND",
+      "endDate": "2024-09-11T17:00:00.000Z",
+      "startDate": "2024-09-11T17:00:00.000Z",
+      "accountNumber": "0011001932418"
+    },
+    {
+      "date": "2024-10-07T06:38:31.272Z",
+      "currency": "VND",
+      "endDate": "2024-09-10T17:00:00.000Z",
+      "startDate": "2024-09-10T17:00:00.000Z",
+      "accountNumber": "0011001932418"
+    },
+    {
+      "date": "2024-10-07T06:38:18.522Z",
+      "currency": "VND",
+      "endDate": "2024-09-09T17:00:00.000Z",
+      "startDate": "2024-08-31T17:00:00.000Z",
+      "accountNumber": "0011001932418"
+    },
+    {
+      "date": "2024-10-07T06:39:29.508Z",
+      "currency": "USD",
+      "endDate": "2024-09-29T17:00:00.000Z",
+      "startDate": "2024-09-10T17:00:00.000Z",
+      "accountNumber": "0011371932538"
     }
   ]
 }

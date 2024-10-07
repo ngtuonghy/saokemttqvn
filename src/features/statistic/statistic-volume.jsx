@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect } from "react";
-import { getTotalTransactionsByDate } from "@/actions/get-statement";
 import { LineChart } from "@mantine/charts";
 import { Container, LoadingOverlay, Text } from "@mantine/core";
 import { format } from "date-fns";
 import StatisticLoading from "./statistic-loading";
+import { getTotalTransactionsByDate } from "@/actions/get-statement";
 
 function StatisticVolume() {
 	const [totalTransactions, setTotalTransactions] = React.useState([]);
@@ -45,7 +45,7 @@ function StatisticVolume() {
 					<StatisticLoading />
 				) : (
 					<LineChart
-						mt={10}
+						m={10}
 						h={400}
 						data={totalTransactions}
 						dataKey="transaction_date"
@@ -58,6 +58,7 @@ function StatisticVolume() {
 							{ offset: 80, color: "cyan.5" },
 							{ offset: 100, color: "blue.5" },
 						]}
+						// withYAxis={false}
 						strokeWidth={5}
 						curveType="natural"
 						series={[{ name: "Tổng số tiền", color: "blue.6" }]}

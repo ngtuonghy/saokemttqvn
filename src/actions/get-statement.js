@@ -1,7 +1,13 @@
 "use server";
 import { prisma } from "@/libs/prisma";
 
-const getStatement = async (offSet = 1, search = "", date, banksName) => {
+const getStatement = async (
+	offSet = 1,
+	search = "",
+	date,
+	banksName,
+	currency,
+) => {
 	prisma.$connect();
 	const p = 20;
 	const conditions = [];
@@ -41,10 +47,13 @@ const getStatement = async (offSet = 1, search = "", date, banksName) => {
 	let dateFilter = {};
 	if (date) {
 		const [startDate, endDate] = date;
-		if (startDate && endDate) {
-			dateFilter = { gte: startDate, lte: endDate };
-		} else if (startDate) {
-			dateFilter = { equals: startDate };
+		const startDateObj = new Date(startDate);
+		const endDateObj = new Date(endDate);
+
+		if (startDateObj.getTime() === endDateObj.getTime()) {
+			dateFilter = { equals: startDateObj };
+		} else {
+			dateFilter = { gte: startDateObj, lte: endDateObj };
 		}
 	}
 
@@ -78,6 +87,7 @@ const getStatement = async (offSet = 1, search = "", date, banksName) => {
 					? { transaction_date: dateFilter }
 					: undefined,
 				banksName ? { bank_name: { in: banksName } } : undefined,
+				currency ? { currency: { in: currency } } : undefined,
 			].filter(Boolean),
 		},
 	});
@@ -98,21 +108,27 @@ const getBanks = async () => {
 };
 
 async function getTotalTransactionsByDate() {
-	prisma.$connect;
+	await prisma.$connect();
 	const totals = await prisma.$queryRaw`
-    SELECT 
-        DATE(transaction_date) AS transaction_date, 
-        SUM(credit_amount) AS total_credit_amount 
-    FROM 
-        "Statement"  
-    GROUP BY 
-        DATE(transaction_date)
-    ORDER BY 
-        transaction_date ASC; 
-`;
+        SELECT 
+            DATE(transaction_date) AS transaction_date, 
+            SUM(
+                CASE 
+                    WHEN currency = 'USD' THEN credit_amount * 24000
+                    ELSE credit_amount
+                END
+            ) AS total_credit_amount 
+        FROM 
+            "Statement"  
+        GROUP BY 
+            DATE(transaction_date)
+        ORDER BY 
+            transaction_date ASC;
+    `;
 
 	return totals;
 }
+
 async function getDateRange() {
 	const transactionDates = await prisma.statement.aggregate({
 		_min: {

@@ -1,6 +1,6 @@
 import { Skeleton, Stack } from "@mantine/core";
 import React from "react";
-const count = 13;
+const count = 8;
 const StatementLoading = () => {
 	return (
 		<Stack className="flex-1">

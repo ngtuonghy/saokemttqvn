@@ -14,9 +14,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import StatementLoading from "./statement-loading";
 import { IconError404 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
-
 import { BidvLogo, VietcombankLogo, VietinbankLogo } from "@/components/svgs";
 import { useStatement } from "@/context/statement-data";
+import Search from "../search/search";
 
 const formatDate = (date) => {
 	return format(new Date(date), "dd/MM/yyyy");
@@ -29,7 +29,12 @@ export function Statement() {
 
 	useEffect(() => {
 		fetchData();
-	}, [search, searchParams.get("from"), searchParams.get("bank")]);
+	}, [
+		search,
+		searchParams.get("from"),
+		searchParams.get("bank"),
+		searchParams.get("currency"),
+	]);
 
 	const bankLogos = {
 		vietcombank: VietcombankLogo,
@@ -52,12 +57,21 @@ export function Statement() {
 			</Table.Td>
 			<Table.Td>{formatDate(element.transaction_date)}</Table.Td>
 			<Table.Td>
-				<NumberFormatter
-					thousandSeparator="."
-					decimalSeparator=","
-					value={element.credit_amount}
-					suffix=" ₫"
-				/>
+				{element.currency === "USD" ? (
+					<NumberFormatter
+						thousandSeparator="."
+						decimalSeparator=","
+						value={element.credit_amount}
+						suffix=" $"
+					/>
+				) : (
+					<NumberFormatter
+						thousandSeparator="."
+						decimalSeparator=","
+						value={element.credit_amount}
+						suffix=" ₫"
+					/>
+				)}
 			</Table.Td>
 			<Table.Td>
 				<Highlight highlight={search}>
@@ -73,41 +87,47 @@ export function Statement() {
 	));
 
 	return (
-		<InfiniteScroll
-			dataLength={data.length}
-			next={fetchMoreData}
-			hasMore={hasMore}
-			loader={<StatementLoading />}
-		>
-			<Stack>
-				<Table highlightOnHover>
-					<Table.Thead>
-						<Table.Tr>
-							<Table.Th>Mã giao dịch</Table.Th>
-							<Table.Th>Ngày</Table.Th>
-							<Table.Th>Số tiền chuyển (VNĐ)</Table.Th>
-							<Table.Th>Nội dung chi tiết</Table.Th>
-							<Table.Th>Tên đối chiếu</Table.Th>
-							<Table.Th>Ngân hàng</Table.Th>
-						</Table.Tr>
-					</Table.Thead>
-					<Table.Tbody>{rows}</Table.Tbody>
-				</Table>
-				{data.length === 0 && !loading && (
-					<Center>
-						<Notification
-							icon={<IconError404 stroke={2} />}
-							withBorder
-							color="yellow"
-							title={<Text size="xl">Không tìm thấy dữ liệu</Text>}
-							withCloseButton={false}
-						>
-							<Text size="lg">coi chừng, bạn đã nhập đúng thông tin chưa?</Text>
-						</Notification>
-					</Center>
-				)}
-			</Stack>
-		</InfiniteScroll>
+		<div>
+			<Search />
+
+			<InfiniteScroll
+				dataLength={data.length}
+				next={fetchMoreData}
+				hasMore={hasMore}
+				loader={<StatementLoading />}
+			>
+				<Stack>
+					<Table highlightOnHover>
+						<Table.Thead>
+							<Table.Tr>
+								<Table.Th>Mã giao dịch</Table.Th>
+								<Table.Th>Ngày</Table.Th>
+								<Table.Th>Số tiền chuyển (VNĐ)</Table.Th>
+								<Table.Th>Nội dung chi tiết</Table.Th>
+								<Table.Th>Tên đối chiếu</Table.Th>
+								<Table.Th>Ngân hàng</Table.Th>
+							</Table.Tr>
+						</Table.Thead>
+						<Table.Tbody>{rows}</Table.Tbody>
+					</Table>
+					{data.length === 0 && !loading && (
+						<Center>
+							<Notification
+								icon={<IconError404 stroke={2} />}
+								withBorder
+								color="yellow"
+								title={<Text size="xl">Không tìm thấy dữ liệu</Text>}
+								withCloseButton={false}
+							>
+								<Text size="lg">
+									coi chừng, bạn đã nhập đúng thông tin chưa?
+								</Text>
+							</Notification>
+						</Center>
+					)}
+				</Stack>
+			</InfiniteScroll>
+		</div>
 	);
 }
 

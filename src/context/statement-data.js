@@ -23,7 +23,16 @@ function StatementProvider({ children }) {
 			const banks = searchParams.get("bank")
 				? searchParams.get("bank").split(",")
 				: null;
-			const data = await getStatement(1, searchParams.get("q"), date, banks);
+			const currency = searchParams.get("currency")
+				? searchParams.get("currency").split(",")
+				: null;
+			const data = await getStatement(
+				1,
+				searchParams.get("q"),
+				date,
+				banks,
+				currency,
+			);
 
 			setData(data);
 			if (data.length < 20) {
@@ -50,11 +59,16 @@ function StatementProvider({ children }) {
 			const banks = searchParams.get("bank")
 				? searchParams.get("bank").split(",")
 				: null;
+
+			const currency = searchParams.get("currency")
+				? searchParams.get("currency").split(",")
+				: null;
 			const data = await getStatement(
 				page + 1,
 				searchParams.get("q"),
 				date,
 				banks,
+				currency,
 			);
 			setPage((prevPage) => prevPage + 1);
 			if (data.length === 0) {

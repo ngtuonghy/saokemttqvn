@@ -6,53 +6,66 @@ import pLimit from "p-limit";
 import { fileURLToPath } from "url";
 
 function convertToISO(dateString) {
-	if (!dateString.includes(":")) {
-		dateString += " 00:00:00";
+	try {
+		let [datePart, timePart] = dateString.split(" ");
+		if (!timePart) {
+			timePart = "00:00:00";
+		} else {
+			const timeParts = timePart.split(":");
+			while (timeParts.length < 3) {
+				timeParts.push("00");
+			}
+			timePart = timeParts.join(":");
+		}
+		const fullDateString = `${datePart} ${timePart}`;
+		const parsedDate = parse(fullDateString, "dd/MM/yyyy HH:mm:ss", new Date());
+		return formatISO(parsedDate, { representation: "complete" });
+	} catch (error) {
+		console.error("Error converting date:", error);
 	}
-	const parsedDate = parse(dateString, "dd/MM/yyyy HH:mm:ss", new Date());
-	return formatISO(parsedDate, { representation: "complete" });
 }
 
 function formatFilePath(filePath) {
 	const fileName = path.basename(filePath, ".csv");
-	const regex = /(.+?)_(\d+)_(\d{2})-(\d{2})_to_(\d{2})-(\d{2})-(\d{4})/;
+	const regex =
+		/(.+?)_(?:([A-Z]+)_)?(\d+)_(\d{2})-(\d{2})_to_(\d{2})-(\d{2})-(\d{4})/;
 	const match = fileName.match(regex);
 
 	if (!match) {
 		throw new Error("File name format is incorrect");
 	}
 	const bankName = match[1];
-	const accountNumber = match[2];
-	const startDate = `${match[3]}/${match[4]}`;
-	const endDate = `${match[5]}/${match[6]}/${match[7]}`;
+	const accountNumber = match[3];
+	let startDate = `${match[4]}/${match[5]}`;
+	const endDate = `${match[6]}/${match[7]}/${match[8]}`;
 
-	if (startDate === `${match[5]}/${match[6]}`) {
-		return {
-			bankName,
-			formattedName: `${bankName}: ${accountNumber} ngày ${endDate}`,
-			endDay: new Date(endDate).toISOString(),
-		};
+	if (startDate.split("/").length === 2) {
+		startDate = `${startDate}/${match[8]}`;
 	}
 	return {
 		bankName,
-		formattedName: `${bankName}: ${accountNumber} từ ngày ${startDate} đến ngày ${endDate}`,
-		endDay: new Date(endDate).toISOString(),
+		currency: match[2] || "VND",
+		accountNumber: accountNumber,
+		startDate: new Date(`${startDate}`).toISOString(),
+		endDate: new Date(endDate).toISOString(),
 	};
 }
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const logChange = (filePath) => {
+const logChange = (formatFile) => {
 	const changelogDir = path.join(__dirname, "./../public/assets/logs/");
 	const changelogPath = path.join(changelogDir, "changelog.json");
 
-	const { bankName, formattedName, endDay } = formatFilePath(filePath);
+	const { bankName, endDate, startDate, accountNumber, currency } = formatFile;
 
 	const logEntry = {
-		file: `Số tiền ủng hộ qua số tài khoản ${formattedName}`,
 		date: new Date().toISOString(),
-		endDay,
+		currency,
+		endDate,
+		startDate,
+		accountNumber,
 	};
 
 	fs.readFile(changelogPath, "utf8", (err, data) => {
@@ -78,16 +91,21 @@ const logChange = (filePath) => {
 		}
 
 		const entryExists = changelog[bankName].some(
-			(entry) => entry.file === logEntry.file,
+			(entry) =>
+				entry.startDate === logEntry.startDate &&
+				entry.endDate === logEntry.endDate,
 		);
 
 		if (entryExists) {
-			console.log(`Changelog already exists for: ${formattedName}`);
+			console.log(`Changelog already exists for: ${bankName}`);
 			return;
 		}
 
 		changelog[bankName].push(logEntry);
-		changelog[bankName].sort((a, b) => new Date(b.endDay) - new Date(a.endDay));
+		changelog[bankName].sort(
+			(a, b) => new Date(b.endDate) - new Date(a.endDate),
+		);
+		changelog[bankName].sort((a, b) => a.accountNumber - b.accountNumber);
 
 		fs.writeFile(changelogPath, JSON.stringify(changelog, null, 2), (err) => {
 			if (err) {
@@ -99,7 +117,7 @@ const logChange = (filePath) => {
 	});
 };
 
-const transactionSeeder = (csvFile, bankName, prisma) => {
+const transactionSeeder = (csvFile, bankName, prisma, moveFile, formatFile) => {
 	return new Promise((resolve, reject) => {
 		const results = [];
 
@@ -117,6 +135,7 @@ const transactionSeeder = (csvFile, bankName, prisma) => {
 						bank_name: bankName,
 						transaction_description: item.transactionComment,
 						reference_name: item.offsetName,
+						currency: formatFile.currency,
 					};
 				});
 
@@ -125,7 +144,16 @@ const transactionSeeder = (csvFile, bankName, prisma) => {
 						data: transactions,
 					});
 					console.log(`${csvFile} has been inserted successfully`);
-					logChange(csvFile, bankName);
+					logChange(formatFile);
+
+					if (moveFile) {
+						const doneDir = path.join(path.dirname(csvFile), "done");
+						await fs.mkdirSync(doneDir, { recursive: true });
+
+						const destinationPath = path.join(doneDir, path.basename(csvFile));
+						await fs.renameSync(csvFile, destinationPath);
+					}
+
 					resolve();
 				} catch (error) {
 					console.error("Error inserting transactions from:", csvFile, error);
@@ -136,7 +164,7 @@ const transactionSeeder = (csvFile, bankName, prisma) => {
 	});
 };
 
-const loadAllCsvFiles = async (directory, bankName, prisma) => {
+const loadAllCsvFiles = async (directory, bankName, prisma, moveFile) => {
 	try {
 		const files = await fs.promises.readdir(directory);
 
@@ -146,7 +174,10 @@ const loadAllCsvFiles = async (directory, bankName, prisma) => {
 
 		const promises = csvFiles.map((file) => {
 			const csvFilePath = path.join(directory, file);
-			return limit(() => transactionSeeder(csvFilePath, bankName, prisma));
+			const formatFile = formatFilePath(csvFilePath);
+			return limit(() =>
+				transactionSeeder(csvFilePath, bankName, prisma, moveFile, formatFile),
+			);
 		});
 
 		await Promise.all(promises);

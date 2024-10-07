@@ -7,7 +7,6 @@ export default function Home() {
 	return (
 		<>
 			<Suspense>
-				<Search />
 				<Statement />
 			</Suspense>
 		</>

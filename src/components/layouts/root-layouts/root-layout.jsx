@@ -12,6 +12,7 @@ import {
 	List,
 	ScrollArea,
 	Spoiler,
+	Text,
 	Title,
 	useMantineColorScheme,
 } from "@mantine/core";
@@ -29,6 +30,7 @@ import {
 } from "@/components/svgs";
 import logs from "@/assets/logs/changelog.json";
 import { useAppShell } from "@/context/app-shell";
+import { formaToDate } from "@/utils/formatDate";
 
 export const MainLayout = ({ children }) => {
 	const { opened, toggle } = useAppShell();
@@ -153,7 +155,21 @@ function SourceData() {
 											</Group>
 										</Title>
 										{data[key].map((item, index) => (
-											<List.Item key={index}>{item.file}</List.Item>
+											<List.Item key={index}>
+												<Text size="lg">
+													Số tiền ủng hộ qua số tài khoản{" "}
+													<Text span c="blue">
+														{item.accountNumber}
+													</Text>{" "}
+													{item.currency !== "VND" && (
+														<Text c="grape" span>
+															({item.currency})
+														</Text>
+													)}{" "}
+													từ ngày {formaToDate(item.startDate)} đến ngày{" "}
+													{formaToDate(item.endDate)}
+												</Text>
+											</List.Item>
 										))}
 									</Spoiler>
 								</List>
