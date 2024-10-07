@@ -1,0 +1,30 @@
+{
+	"name": "@fdocs/extractor",
+	"version": "1.0.1",
+	"description": "",
+	"keywords": ["@fdocs", "pdf", "extractor"],
+	"author": "ngtuonghy <ngtuonghy@outlook.com>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ngtuonghy/fdocs"
+	},
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.cts",
+	"exports": {
+		"require": {
+			"types": "./dist/index.d.cts",
+			"default": "./dist/index.cjs"
+		},
+		"import": {
+			"types": "./dist/index.d.mts",
+			"default": "./dist/index.mjs"
+		}
+	},
+	"files": ["dist", "src"],
+
+	"devDependencies": {
+		"@fdocs/pdf": "^1.1.3"
+	}
+}
