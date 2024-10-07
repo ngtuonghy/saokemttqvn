@@ -16,7 +16,7 @@ import { IconError404 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
 import { BidvLogo, VietcombankLogo, VietinbankLogo } from "@/components/svgs";
 import { useStatement } from "@/context/statement-data";
-import Search from "../search/search";
+import Search from "@/features/search/search";
 
 const formatDate = (date) => {
 	return format(new Date(date), "dd/MM/yyyy");
@@ -50,8 +50,8 @@ export function Statement() {
 		return bankName;
 	};
 
-	const rows = data.map((element) => (
-		<Table.Tr key={element.id}>
+	const rows = data.map((element, index) => (
+		<Table.Tr key={index}>
 			<Table.Td>
 				<Highlight highlight={search}>{element.no}</Highlight>
 			</Table.Td>
