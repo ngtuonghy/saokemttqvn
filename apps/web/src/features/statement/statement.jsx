@@ -23,7 +23,8 @@ const formatDate = (date) => {
 };
 
 export function Statement() {
-	const { data, fetchData, loading, fetchMoreData, hasMore } = useStatement();
+	const { data, fetchData, loading, fetchMoreData, hasMore, isFetching } =
+		useStatement();
 	const searchParams = useSearchParams();
 	const search = searchParams.get("q") || "";
 
@@ -112,7 +113,7 @@ export function Statement() {
 						</Table.Thead>
 						<Table.Tbody>{rows}</Table.Tbody>
 					</Table>
-					{data.length === 0 && !loading && (
+					{data.length === 0 && !loading && isFetching && (
 						<Center>
 							<Notification
 								icon={<IconError404 stroke={2} />}

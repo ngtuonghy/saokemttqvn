@@ -27,4 +27,6 @@ model Statement {
   created_at     DateTime  @default(now())   
   updated_at     DateTime  @updatedAt        
 
+ @@index([transaction_date, bank_name, credit_amount, currency], name: "statement_index") 
+
 }

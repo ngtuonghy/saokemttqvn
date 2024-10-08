@@ -8,12 +8,14 @@ const context = createContext();
 function StatementProvider({ children }) {
 	const [data, setData] = useState([]);
 	const [page, setPage] = useState(1);
+	const [isFetching, setIsFetching] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
 	const [error, setError] = useState(null);
 	const searchParams = useSearchParams();
 	const fetchData = async () => {
 		try {
+			setIsFetching(true);
 			setData([]);
 			setLoading(true);
 			setHasMore(true);
@@ -94,6 +96,7 @@ function StatementProvider({ children }) {
 				fetchMoreData,
 				fetchData,
 				hasMore,
+				isFetching,
 			}}
 		>
 			{children}

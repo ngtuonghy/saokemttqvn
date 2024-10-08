@@ -32,7 +32,10 @@ const Search = () => {
 	const [date, setDate] = React.useState([null, null]);
 	const [banks, setBanks] = React.useState([]);
 	const [currency, setCurrency] = React.useState([]);
-	const [dateRange, setDateRange] = React.useState({});
+	const [dateRange, setDateRange] = React.useState({
+		minDate: null,
+		maxDate: null,
+	});
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
@@ -96,7 +99,9 @@ const Search = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			const dateRange = await getDateRange();
-			setDateRange(dateRange);
+			if (dateRange) {
+				setDateRange(dateRange);
+			}
 		};
 		fetchData();
 	}, []);
