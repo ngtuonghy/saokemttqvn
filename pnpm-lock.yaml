@@ -75,9 +75,6 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0
     devDependencies:
-      '@fdocs/extractor':
-        specifier: ^1.0.1
-        version: 1.0.1
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.6.2)
@@ -765,12 +762,6 @@ packages:
   '@eslint/js@8.57.1':
     resolution: {integrity: sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
-
-  '@fdocs/extractor@1.0.1':
-    resolution: {integrity: sha512-cndBmCF+534Vvui7UeRFTmyVlzevdV5ZZ+gEYII9dVzz2Ee/iWOYWKqMiTNVbAlqwpu7ifxYXVn76AFp6kHI7w==}
-
-  '@fdocs/pdf@1.1.0':
-    resolution: {integrity: sha512-9VG9IkHbxMPuuQkLyDtWIFZmkSUF48bCrjsBglgZimeV43Rb5oHKtObipt4uQEp8TxJscJarxrfwu1YyDxrprA==}
 
   '@fdocs/pdf@1.1.3':
     resolution: {integrity: sha512-dxO9unvJJVZob94fsYK4PiYm56RaoHYHxJztUrwe7bu0U7FDTtdmHOojNbtFBDEI9BC1750xT5uZK6c1VSi6kA==}
@@ -4051,20 +4042,6 @@ snapshots:
       - supports-color
 
   '@eslint/js@8.57.1': {}
-
-  '@fdocs/extractor@1.0.1':
-    dependencies:
-      '@fdocs/pdf': 1.1.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-
-  '@fdocs/pdf@1.1.0':
-    dependencies:
-      pdfjs-dist: 4.7.76
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
 
   '@fdocs/pdf@1.1.3':
     dependencies:
