@@ -1,11 +1,7 @@
 import { createClient } from "redis";
 //
 const redis = await createClient({
-	password: process.env.REDIS_PASSWORD,
-	socket: {
-		host: process.env.REDIS_HOST,
-		port: process.env.REDIS_PORT,
-	},
+	url: process.env.REDIS_URL,
 }).connect();
 
 export { redis };
