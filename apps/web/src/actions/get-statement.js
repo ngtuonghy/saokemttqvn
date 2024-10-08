@@ -9,7 +9,6 @@ const getStatement = async (
 	banksName,
 	currency,
 ) => {
-	prisma.$connect();
 	const p = 20;
 	const conditions = [];
 
@@ -89,29 +88,24 @@ const getStatement = async (
 
 	// console.log("Cache miss, fetching from database:", cacheKey);
 
-	try {
-		const data = await prisma.statement.findMany({
-			skip: (offSet - 1) * p,
-			take: p,
-			orderBy,
-			where: {
-				AND: [
-					conditions.length > 0 ? { OR: conditions } : undefined,
-					Object.keys(dateFilter).length > 0
-						? { transaction_date: dateFilter }
-						: undefined,
-					banksName ? { bank_name: { in: banksName } } : undefined,
-					currency ? { currency: { in: currency } } : undefined,
-				].filter(Boolean),
-			},
-		});
+	const data = await prisma.statement.findMany({
+		skip: (offSet - 1) * p,
+		take: p,
+		orderBy,
+		where: {
+			AND: [
+				conditions.length > 0 ? { OR: conditions } : undefined,
+				Object.keys(dateFilter).length > 0
+					? { transaction_date: dateFilter }
+					: undefined,
+				banksName ? { bank_name: { in: banksName } } : undefined,
+				currency ? { currency: { in: currency } } : undefined,
+			].filter(Boolean),
+		},
+	});
 
-		prisma.$disconnect();
-		await redis.set(cacheKey, JSON.stringify(data), { EX: 60 * 60 * 24 });
-		return JSON.parse(JSON.stringify(data));
-	} catch (error) {
-		console.error(error);
-	}
+	await redis.set(cacheKey, JSON.stringify(data), { EX: 60 * 60 * 24 });
+	return JSON.parse(JSON.stringify(data));
 };
 
 const getBanks = async () => {
