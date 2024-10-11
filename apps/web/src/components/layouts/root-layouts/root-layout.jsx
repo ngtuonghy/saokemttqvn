@@ -22,6 +22,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { IconMoonStars } from "@tabler/icons-react";
 import {
+	AgribankWordmark,
 	BidvWordmark,
 	MttqvnLogo,
 	SunIcon,
@@ -103,6 +104,7 @@ function SourceData() {
 		vietcombank: VietcombankWordmark,
 		vietinbank: VietinbankWordmark,
 		bidv: BidvWordmark,
+		agribank: AgribankWordmark,
 	};
 
 	const isWorkMark = (bankName) => {

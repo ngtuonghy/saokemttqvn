@@ -14,7 +14,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import StatementLoading from "./statement-loading";
 import { IconError404 } from "@tabler/icons-react";
 import { useSearchParams } from "next/navigation";
-import { BidvLogo, VietcombankLogo, VietinbankLogo } from "@/components/svgs";
+import {
+	AgribankLogo,
+	BidvLogo,
+	VietcombankLogo,
+	VietinbankLogo,
+} from "@/components/svgs";
 import { useStatement } from "@/context/statement-data";
 import Search from "@/features/search/search";
 
@@ -41,6 +46,7 @@ export function Statement() {
 		vietcombank: VietcombankLogo,
 		vietinbank: VietinbankLogo,
 		bidv: BidvLogo,
+		agribank: AgribankLogo,
 	};
 
 	const isLogo = (bankName) => {

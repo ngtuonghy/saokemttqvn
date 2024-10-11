@@ -2,6 +2,7 @@ import { bidv } from "./bidv/bidv.js";
 import { vietinbank } from "./vietinbank/vietinbank.js";
 import { vietcombank } from "./vietcombank/vietcombank.js";
 import pLimit from "p-limit";
+import { agribank } from "./agribank/agribank.js";
 
 const limit = pLimit(1);
 
@@ -12,6 +13,7 @@ const limit = pLimit(1);
 			() => vietinbank(true, false),
 			() => vietcombank(true, false),
 			() => bidv(true, false),
+			() => agribank(true, false),
 		];
 
 		const limitedTasks = tasks.map((task) => limit(task));

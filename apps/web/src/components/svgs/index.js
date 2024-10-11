@@ -6,3 +6,5 @@ export { default as VietinbankWordmark } from "@/assets/logos/vietinbank-wordmar
 export { default as VietcombankWordmark } from "@/assets/logos/vietcombank-wordmark.svg";
 export { default as BidvWordmark } from "@/assets/logos/bidv-wordmark.svg";
 export { default as MttqvnLogo } from "@/assets/logos/mttqvn.svg";
+export { default as AgribankLogo } from "@/assets/logos/agribank.svg";
+export { default as AgribankWordmark } from "@/assets/logos/agribank-wordmark.svg";
