@@ -82,9 +82,10 @@ const agribank = async (
 		) {
 			currentTransaction[headers[2]] = line.replace(/,/g, "");
 		} else if (
-			currentTransaction &&
-			!currentTransaction[headers[3]] &&
-			isValidCurrency(line.split(",")[0])
+			(currentTransaction &&
+				!currentTransaction[headers[3]] &&
+				isValidCurrency(line.split(",")[0])) ||
+			isValidCurrency(line.split(" ")[0])
 		) {
 			const lineSplit = line.split(" ");
 			// console.log("lineSplit", lineSplit);
