@@ -4,7 +4,7 @@ import { vietcombankParser } from "../vietcombank";
 
 const filePath = path.join(
 	__dirname,
-	"./vietcombank_USD_0011371932538_09-11_to_09-30-2024.pdf",
+	"./vietcombank_0011001932418_10-01_to_10-07-2024.pdf",
 );
 const extractor = async () => {
 	const vietinbank = await vietcombankParser(filePath, {

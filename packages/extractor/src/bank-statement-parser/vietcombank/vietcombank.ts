@@ -1,6 +1,6 @@
 import fs from "fs";
 import { pdf } from "@fdocs/pdf";
-import { generateCSV } from "../../../utils/generate-CSV";
+import { generateCSV } from "../../utils/generate-CSV";
 
 type VietinbankParserOptions = {
 	pages?: string | "all";
@@ -10,11 +10,13 @@ type VietinbankParserOptions = {
 	password?: string;
 };
 
-function isNumber(str) {
-	// Thay dấu chấm ngăn cách phần ngàn thành chuỗi rỗng và dấu phẩy thành dấu chấm
-	const normalizedStr = str.replace(/\./g, "").replace(",", ".");
+function isIntegerString(value) {
+	// Kiểm tra nếu chuỗi là số nguyên
+	return /^-?\d+$/.test(value);
+}
 
-	// Kiểm tra nếu giá trị đã chuyển đổi là một số hợp lệ
+function isNumber(str) {
+	const normalizedStr = str.replace(/\./g, "").replace(",", ".");
 	return !isNaN(parseFloat(normalizedStr)) && isFinite(normalizedStr);
 }
 function isValidCurrency(str: string) {
@@ -42,18 +44,19 @@ const vietcombankParser = async (
 		sort: "none",
 		pages: pages,
 		password: config.password,
-		skipLinesByText: [
-			{
-				type: "contain",
-				text: "Ghi chú: Quý khách sử dụng văn bản này đúng mục đích",
-			},
-			{
-				type: "exact",
-				text: "ữ liệu cá nhân ./.",
-			},
-		],
-		skipLines: {
-			pages: [
+
+		skip: {
+			text: [
+				{
+					match: "contain",
+					value: "Ghi chú: Quý khách sử dụng văn bản này đúng mục đích",
+				},
+				{
+					match: "exact",
+					value: "ữ liệu cá nhân ./.",
+				},
+			],
+			pageSpecific: [
 				{
 					page: 1,
 					lines: "1-16",
@@ -66,22 +69,22 @@ const vietcombankParser = async (
 			ranges: [
 				{
 					start: {
-						text: "Telex",
-						type: "exact",
+						value: "Telex",
+						match: "exact",
 					},
 					end: {
-						text: /^Page \d+ of \d+$/,
-						type: "regex",
+						value: /^Page \d+ of \d+$/,
+						match: "regex",
 					},
 				},
 				{
 					start: {
-						text: "Ngày giờ giao dịch",
-						type: "exact",
+						value: "Ngày giờ giao dịch",
+						match: "exact",
 					},
 					end: {
-						text: "STT ",
-						type: "exact",
+						value: "STT ",
+						match: "exact",
 					},
 				},
 			],
@@ -92,6 +95,7 @@ const vietcombankParser = async (
 	fs.writeFileSync("vietcombank.txt", lines.join("\n"));
 	let currentTransaction = null;
 
+	let prevId = 0;
 	lines.forEach((line, index) => {
 		const prevLine = lines[index - 1];
 		const lineReplace = line;
@@ -112,10 +116,13 @@ const vietcombankParser = async (
 		} else if (
 			currentTransaction &&
 			!currentTransaction[headers[0]] &&
-			isNumber(line) &&
+			isIntegerString(line) &&
+			parseInt(line) === prevId + 1 &&
 			currentTransaction[headers[2]]
 		) {
+			// console.log("line", line, prevId);
 			currentTransaction[headers[0]] = line;
+			prevId = parseInt(line);
 		} else if (
 			currentTransaction &&
 			currentTransaction[headers[1]] &&

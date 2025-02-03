@@ -36,6 +36,7 @@ const Search = () => {
 		minDate: null,
 		maxDate: null,
 	});
+	// console.log("logs", date);
 	const router = useRouter();
 	const pathname = usePathname();
 	const searchParams = useSearchParams();

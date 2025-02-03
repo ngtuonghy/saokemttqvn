@@ -3,6 +3,7 @@ import { vietinbank } from "./vietinbank/vietinbank.js";
 import { vietcombank } from "./vietcombank/vietcombank.js";
 import pLimit from "p-limit";
 import { agribank } from "./agribank/agribank.js";
+import { redis } from "../src/libs/redis/index.js";
 
 const limit = pLimit(1);
 
@@ -21,6 +22,9 @@ const limit = pLimit(1);
 		await Promise.all(limitedTasks);
 
 		console.log("All tasks have been executed successfully.");
+		await redis.FLUSHALL();
+		console.log("Redis FLUSHALL completed.");
+		await redis.quit();
 	} catch (error) {
 		console.error("Error executing tasks:", error);
 	}
